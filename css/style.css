@@ -1,7 +1,7 @@
 .calculator
 {
 	margin: auto;	
-	width: 55vh;
+	width: 53vh;
 	height: 90vh;  
 }
 
@@ -89,6 +89,7 @@
 	margin:0px -2px 2px 0px;
 	padding:0px;
 	border:none;
+	text-decoration: none;
 }
 
 .calk-key_service
@@ -129,7 +130,7 @@
 {
 	font-size:250%;
 	position:relative;
-	top:-5px;
+	top:0px;
 }
 
 .calk-key__char_operator
@@ -137,19 +138,19 @@
 	color:#FFFEFD;
 	font-size:250%;
 	position:relative;
-	top:-5px;
+	top:0px;
 }
 
 .calk-key__char_char-plus
 {
 	position:relative;
 	left:11px;
-	top:-11px;
+	top:-4px;
 }
 
 .calk-key__char_char-minus
 {
 	position:relative;
 	left:-9px;
-	top:0px;
+	top:3px;
 }
