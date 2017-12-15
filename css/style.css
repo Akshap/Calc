@@ -79,16 +79,16 @@
 {
 	height:75%;
 	padding-top:3px;
+	font-size:0px;
 }
 
 .calk-key
 {
 	display:inline-block;
 	cursor: pointer;
-	box-sizing: content-box;
 	width:calc(25% - 1px);
 	height:calc(20% - 1px);
-	margin:0px -3px 1px 0px;
+	margin:0px 1px 1px 0px;
 }
 
 .calk-key-service
@@ -99,7 +99,8 @@
 .calk-key-operator
 {
 	background-color:#F78F12;
-	width:25%;
+	margin-right: 0px;
+    width: 25%;
 }
 
 .calk-key-operand
@@ -117,18 +118,17 @@
 .calk-key__char
 {
 	font-family:Segoe UI;
+	font-size:5vh;
 }
 
 .calk-key__char-digit
 {
 	color:#000000;
-	font-size:250%;
 	font-weight:300;
 }
 
 .calk-key__char-service
 {
-	font-size:250%;
 	position:relative;
 	top:0px;
 }
@@ -136,7 +136,6 @@
 .calk-key__char-operator
 {
 	color:#FFFEFD;
-	font-size:250%;
 	position:relative;
 	top:0px;
 }
