@@ -16,8 +16,11 @@ for (var i = 0; i < key.length; i++)
 	}); 
 };
 
-/*
-*/
+/* 1. Реализовать повторение операции при повторном "=".
+*  2. Реализовать вычисление при повторном операторе. 
+*  3. Разрулить минус в первой позиции.
+*/ 
+
 function doMath()
 {
 	var firstOperand = "";
@@ -71,11 +74,6 @@ function doMath()
 				calculatePercentage();
 				break;
 			case "-":
-				if (firstOperand == "" && lastOperand == "")
-				{
-					collectNumeric();
-					break;
-				};
 			case "+":
 			case "/":
 			case "*":
@@ -144,12 +142,22 @@ function doMath()
 		(firstOperand !== "") ? lastOperand = ((+firstOperand) / 100) * (+lastOperand) : lastOperand = "0";
 	};
 	
-	function rememberOperator()
+	function rememberOperator() //Почистить ЛОГИКУ.
 	{
-		if (lastOperand !== "")
+		if (mathKey == "-" && firstOperand == "" && lastOperand == "")
 		{
-			mathOperator = mathKey;
-			submitValue();
+			collectNumeric();
+		}
+		else
+		{
+			if (firstOperand !== "" || lastOperand !== "")
+			{
+				mathOperator = mathKey;
+			};
+			if (lastOperand !== "")
+			{
+				submitValue();
+			};
 		};
 	};
 	
@@ -204,16 +212,9 @@ function doMath()
 		mathResult = (+firstOperand) / (+lastOperand);
 	};
 	
-	
-	function newMathIteration()
-	{
-		
-	};
-	
-	
 	function mathIterationCompletion()
 	{
-		if (mathKey == "=")
+		if (isNumeric(mathResult))
 		{
 			writeCompletedMathExpression();
 		}
@@ -228,9 +229,8 @@ function doMath()
 		prevValue.value = firstOperand + " " + mathOperator + " " + lastOperand + " =";
 		calcInput.value = mathResult;
 		
-		firstOperand = "";
-		lastOperand = "";
-		mathOperator ="";
+		lastOperand = mathResult;
+		mathResult = "";
 	};
 	
 	function writeMathOperatirs()
@@ -238,13 +238,10 @@ function doMath()
 		calcInput.value = lastOperand;
 		prevValue.value = firstOperand + " " + mathOperator;
 	};
-	
-	
-	
+		
 	function isNumeric(n) 
 	{
 		return !isNaN(parseFloat(n)) && isFinite(n);
-	};
-	
+	};	
 };
 
