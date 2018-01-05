@@ -1,44 +1,68 @@
 var key = document.querySelectorAll('.calk-key');
-var currOperand = document.querySelector('.calc-input-container__calc-input');
-var prevOperand = document.querySelector('.calc-line__calc-string');
-var operator = null;
-var calcTemp = null;
-var calcFlag = false;
+var calcInput = document.querySelector('.calc-input-container__calc-input');
+var prevValue = document.querySelector('.calc-line__calc-string');
 
 var recordableCharsArray = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
-var operatorsArray = ["-", "+", "/", "*", "+/-", "="];
+var operatorsArray = ["-", "+", "/", "*", "+/-", "=", "%"];
 
+var doMath = new doMath();
 
-	
 for (var i = 0; i < key.length; i++) 
 {
 	key[i].addEventListener("click", function() 
 	{
 		console.log("key - " + this.value);
-		getMathExpression(this.value);
+		doMath.receiveKey(this.value);
 	}); 
 };
 
-function getMathExpression(key)
+/*
+*/
+function doMath()
 {
-	if (recordableCharsArray.indexOf(key) !== -1)
+	var firstOperand = "";
+	var lastOperand = "";
+	var mathOperator = "";
+	var mathResult = "";
+	var mathKey = "";
+	
+	this.receiveKey = function(key)
 	{
-		if (calcFlag == true)
+		mathKey = key;
+		if (recordableCharsArray.indexOf(mathKey) !== -1)
 		{
-			calcFlag = newCalculation();
+			collectKey();
+		}
+		else
+		{
+			doOperation();
 		};
-		writeKey(key);
-	}
-	else
+		writeKeyInCalcFields();
+		console.log("First operand - " + firstOperand + "\n" + "Last operand - " + lastOperand + "\n" + "Operator - " + mathOperator + "\n" + "Result - " + mathResult);
+	};
+
+	function collectKey()
 	{
-		if (calcFlag == true)
+		switch (mathKey)
 		{
-			calcFlag = continueCalculating();
+			case ".":
+				collectPoint();
+			break;
+			case "0":
+				collectZero();
+			break;
+			default:
+				collectNumeric();
+			break;
 		};
-		switch (key)
+	};
+	
+	function doOperation()
+	{
+		switch (mathKey)
 		{
 			case "AC":
-				clearInput(key);
+				clearInput();
 				break;
 			case "+/-":
 				changeMathSign();
@@ -47,125 +71,143 @@ function getMathExpression(key)
 				calculatePercentage();
 				break;
 			case "-":
-				if (currOperand.value == "" && prevOperand.value == "")
+				if (firstOperand == "" && lastOperand == "")
 				{
-					writeKey(key);
+					collectNumeric();
 					break;
 				};
 			case "+":
 			case "/":
 			case "*":
-				operator = key;
-				submitValue();
+				rememberOperator();
 				break;
 			case "=":
 				culculate();
 				break;
 		};
 	};
-};
-
-function writeKey(key)
-{
-	switch (key)
+	
+	function collectNumeric()
 	{
-		case ".":
-			if (currOperand.value == "")
-			{
-				currOperand.value = "0";
-			};
-			if (currOperand.value.indexOf(".") == -1)
-			{
-				currOperand.value = currOperand.value + key;
-			};
-			break;
-		case "0":
-			if (currOperand.value !== "0" && key == "0")
-			{
-				currOperand.value = currOperand.value + key;
-			};
-			break;
-		default:
-			if (currOperand.value == "0")
-			{
-				currOperand.value = "";
-			};
-			currOperand.value = currOperand.value + key;
-			break;
-	};
-};
-
-function clearInput(key)
-{
-	if (key == "AC" && currOperand.value == "")
-	{
-		prevOperand.value = ""; 
-		operator = "";
-	};
-	currOperand.value = "";
-};
-
-function submitValue()
-{
-	if (currOperand.value !== "")
-	{
-		prevOperand.value = currOperand.value;
-		clearInput();
-	};
-};
-
-function changeMathSign()
-{
-	currOperand.value = currOperand.value * (-1);
-};
-
-function newCalculation()
-{
-	prevOperand.value = "";
-	currOperand.value = "";
-	calcTemp = "";
-	return false;
-};
-
-function continueCalculating()
-{
-	prevOperand.value = currOperand.value;
-	currOperand.value = "";
-	calcTemp = "";
-	return false;
-};
-
-function writeCalculationStr()
-{
-	prevOperand.value = prevOperand.value + " " + operator + " " + calcTemp + " = ";
-	calcFlag = true; 
-};
-
-function calculatePercentage()
-{
-	(prevOperand.value !== "") ? currOperand.value = ((+prevOperand.value) / 100) * (+currOperand.value) : currOperand.value = "0";
-};
-
-function culculate()
-{
-	if (currOperand.value !== "" && operator !== "" && prevOperand.value !== "")
-	{
-		calcTemp = currOperand.value;
-		switch(operator)
+		if (lastOperand == "0")
 		{
-			case "+":
-				currOperand.value = +prevOperand.value + (+currOperand.value);
-				break;
-			case "-":
-				currOperand.value = +prevOperand.value - (+currOperand.value);
-				break;
-			case "/":
-				currOperand.value = +prevOperand.value / (+currOperand.value);
-				break;
-			case "*":
-				currOperand.value = +prevOperand.value * (+currOperand.value);
-				break;
+			lastOperand = "";
 		};
-		writeCalculationStr();
+		lastOperand = lastOperand + mathKey;
 	};
+	
+	function collectPoint()
+	{
+		if (lastOperand == "")
+		{
+			lastOperand = "0";
+		};
+		if (lastOperand.indexOf(".") == -1)
+		{
+			lastOperand = lastOperand + mathKey;
+		};
+	};
+	
+	function collectZero()
+	{
+		if (lastOperand !== "0" && mathKey == "0")
+		{
+			lastOperand = lastOperand + mathKey;
+		};
+	};
+	
+	function writeKeyInCalcFields()
+	{
+		calcInput.value = lastOperand;
+		prevValue.value = firstOperand + " " + mathOperator;
+	};
+	
+	function clearInput()
+	{
+		if (mathKey == "AC" && lastOperand == "")
+		{
+			firstOperand = ""; 
+			mathOperator = "";
+			mathResult = "";
+		};
+		lastOperand = "";
+	}; 
+	
+	function changeMathSign()
+	{
+		lastOperand = lastOperand * (-1);
+		writeKeyInCalcFields();
+	};
+	
+	function calculatePercentage()
+	{
+		(firstOperand !== "") ? lastOperand = ((+firstOperand) / 100) * (+lastOperand) : lastOperand = "0";
+	};
+	
+	function rememberOperator()
+	{
+			mathOperator = mathKey;
+			submitValue();
+	};
+	
+	function submitValue()
+	{
+		if (lastOperand !== "")
+		{
+			firstOperand = lastOperand;
+			clearInput();
+			writeKeyInCalcFields();
+		};
+	};
+	
+	function culculate()
+	{
+		if (firstOperand !== "" && mathOperator !== "" && lastOperand !== "")
+		{
+			switch(mathOperator)
+			{
+				case "+":
+					getSum();
+					break;
+				case "-":
+					getDifference();
+					break;
+				case "/":
+					getProduct();
+					break;
+				case "*":
+					getQuotient();
+					break;
+			};
+			writeMathExpression();
+		};
+	};
+
+	function getSum()
+	{
+		mathResult = (+firstOperand) + (+lastOperand);
+	};
+	
+	function getDifference()
+	{
+		mathResult = (+firstOperand) - (+lastOperand);
+	};
+	
+	function getProduct()
+	{
+		mathResult = (+firstOperand) * (+lastOperand);
+	};
+	
+	function getQuotient()
+	{
+		mathResult = (+firstOperand) / (+lastOperand);
+	};
+	
+	function writeMathExpression()
+	{
+		prevValue.value = firstOperand + " " + mathOperator + " " + lastOperand + " =";
+		calcInput.value = mathResult;
+	};
+	
 };
+
