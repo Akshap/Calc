@@ -37,10 +37,10 @@ function doMath()
 		{
 			doOperation();
 		};
-		writeKeyInCalcFields();
+		mathIterationCompletion();
 		console.log("First operand - " + firstOperand + "\n" + "Last operand - " + lastOperand + "\n" + "Operator - " + mathOperator + "\n" + "Result - " + mathResult);
 	};
-
+	
 	function collectKey()
 	{
 		switch (mathKey)
@@ -116,12 +116,6 @@ function doMath()
 		};
 	};
 	
-	function writeKeyInCalcFields()
-	{
-		calcInput.value = lastOperand;
-		prevValue.value = firstOperand + " " + mathOperator;
-	};
-	
 	function clearInput()
 	{
 		if (mathKey == "AC" && lastOperand == "")
@@ -135,8 +129,14 @@ function doMath()
 	
 	function changeMathSign()
 	{
-		lastOperand = lastOperand * (-1);
-		writeKeyInCalcFields();
+		if (isNumeric(lastOperand))
+		{
+			lastOperand = lastOperand * (-1);
+		}
+		else
+		{
+			lastOperand = 0;
+		};
 	};
 	
 	function calculatePercentage()
@@ -146,8 +146,11 @@ function doMath()
 	
 	function rememberOperator()
 	{
+		if (lastOperand !== "")
+		{
 			mathOperator = mathKey;
 			submitValue();
+		};
 	};
 	
 	function submitValue()
@@ -156,7 +159,6 @@ function doMath()
 		{
 			firstOperand = lastOperand;
 			clearInput();
-			writeKeyInCalcFields();
 		};
 	};
 	
@@ -172,14 +174,13 @@ function doMath()
 				case "-":
 					getDifference();
 					break;
-				case "/":
+				case "*":
 					getProduct();
 					break;
-				case "*":
+				case "/":
 					getQuotient();
 					break;
 			};
-			writeMathExpression();
 		};
 	};
 
@@ -203,10 +204,46 @@ function doMath()
 		mathResult = (+firstOperand) / (+lastOperand);
 	};
 	
-	function writeMathExpression()
+	
+	function newMathIteration()
+	{
+		
+	};
+	
+	
+	function mathIterationCompletion()
+	{
+		if (mathKey == "=")
+		{
+			writeCompletedMathExpression();
+		}
+		else 
+		{
+			writeMathOperatirs();
+		};
+	};
+	
+	function writeCompletedMathExpression()
 	{
 		prevValue.value = firstOperand + " " + mathOperator + " " + lastOperand + " =";
 		calcInput.value = mathResult;
+		
+		firstOperand = "";
+		lastOperand = "";
+		mathOperator ="";
+	};
+	
+	function writeMathOperatirs()
+	{
+		calcInput.value = lastOperand;
+		prevValue.value = firstOperand + " " + mathOperator;
+	};
+	
+	
+	
+	function isNumeric(n) 
+	{
+		return !isNaN(parseFloat(n)) && isFinite(n);
 	};
 	
 };
