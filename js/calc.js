@@ -17,8 +17,6 @@ for (var i = 0; i < key.length; i++)
 };
 
 /* 1. Реализовать повторение операции при повторном "=".
-*  2. Реализовать вычисление при повторном операторе. 
-*  3. Разрулить минус в первой позиции.
 */ 
 
 function doMath()
@@ -38,7 +36,7 @@ function doMath()
 		}
 		else
 		{
-			doOperation();
+			doMathOperation();
 		};
 		mathIterationCompletion();
 		console.log("First operand - " + firstOperand + "\n" + "Last operand - " + lastOperand + "\n" + "Operator - " + mathOperator + "\n" + "Result - " + mathResult);
@@ -46,6 +44,10 @@ function doMath()
 	
 	function collectKey()
 	{
+		if (mathResult !== "")
+		{
+			clearInput("clearAll");
+		};	
 		switch (mathKey)
 		{
 			case ".":
@@ -60,7 +62,12 @@ function doMath()
 		};
 	};
 	
-	function doOperation()
+	function newCalculate()
+	{
+		
+	}
+	
+	function doMathOperation()
 	{
 		switch (mathKey)
 		{
@@ -77,7 +84,7 @@ function doMath()
 			case "+":
 			case "/":
 			case "*":
-				rememberOperator();
+				applyOperator();
 				break;
 			case "=":
 				culculate();
@@ -89,7 +96,7 @@ function doMath()
 	{
 		if (lastOperand == "0")
 		{
-			lastOperand = "";
+			clearInput();
 		};
 		lastOperand = lastOperand + mathKey;
 	};
@@ -114,17 +121,6 @@ function doMath()
 		};
 	};
 	
-	function clearInput()
-	{
-		if (mathKey == "AC" && lastOperand == "")
-		{
-			firstOperand = ""; 
-			mathOperator = "";
-			mathResult = "";
-		};
-		lastOperand = "";
-	}; 
-	
 	function changeMathSign()
 	{
 		if (isNumeric(lastOperand))
@@ -142,19 +138,39 @@ function doMath()
 		(firstOperand !== "") ? lastOperand = ((+firstOperand) / 100) * (+lastOperand) : lastOperand = "0";
 	};
 	
+	function applyOperator()
+	{
+		if (firstOperand !== "" && lastOperand !== "")
+		{
+			culculate();
+		};
+		if (mathResult !== "")
+		{
+			rememberResult()
+		};
+		rememberOperator();
+	};
+	
+	function rememberResult()
+	{
+		var r = mathResult;
+		clearInput("clearAll");
+		firstOperand = r;
+	};
+	
 	function rememberOperator() //Почистить ЛОГИКУ.
 	{
-		if (mathKey == "-" && firstOperand == "" && lastOperand == "")
+		if (mathKey == "-" && firstOperand == "" && lastOperand == "" && lastOperand !=="-")
 		{
 			collectNumeric();
 		}
 		else
 		{
-			if (firstOperand !== "" || lastOperand !== "")
+			if ((firstOperand !== "" || lastOperand !== "") && lastOperand !== "-")
 			{
 				mathOperator = mathKey;
 			};
-			if (lastOperand !== "")
+			if (lastOperand !== "" && lastOperand !== "-")
 			{
 				submitValue();
 			};
@@ -169,6 +185,17 @@ function doMath()
 			clearInput();
 		};
 	};
+
+	function clearInput(clearAll)
+	{
+		if (lastOperand == "" || clearAll == "clearAll" || mathResult !== "")
+		{
+			firstOperand = ""; 
+			mathOperator = "";
+			mathResult = "";
+		};
+		lastOperand = "";
+	}; 
 	
 	function culculate()
 	{
@@ -228,9 +255,6 @@ function doMath()
 	{
 		prevValue.value = firstOperand + " " + mathOperator + " " + lastOperand + " =";
 		calcInput.value = mathResult;
-		
-		lastOperand = mathResult;
-		mathResult = "";
 	};
 	
 	function writeMathOperatirs()
