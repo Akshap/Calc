@@ -5,8 +5,8 @@ var prevValue = document.querySelector('.calc-line__calc-string');
 var recordableCharsArray = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."];
 var operatorsArray = ["-", "+", "/", "*", "+/-", "=", "%"];
 
-var doMath = new doMath();
 
+var doMath = new doMath();
 for (var i = 0; i < key.length; i++) 
 {
 	key[i].addEventListener("click", function() 
@@ -17,9 +17,9 @@ for (var i = 0; i < key.length; i++)
 };
 
 /* ...
-*  4. Починить баг с делением на нуль
 *  5. Баг со сменой знака в завершённом выражении 
 *  6. Почистить rememberOperator()
+*  7. Почистить culculate()
 */ 
 
 function doMath()
@@ -249,7 +249,10 @@ function doMath()
 	
 	function getQuotient()
 	{
-		mathResult = (+firstOperand) / (+lastOperand);
+		if (lastOperand !== "0")
+		{
+			mathResult = (+firstOperand) / (+lastOperand);
+		};
 	};
 	
 	function mathIterationCompletion()
