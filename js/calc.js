@@ -16,7 +16,10 @@ for (var i = 0; i < key.length; i++)
 	}); 
 };
 
-/* 1. Реализовать повторение операции при повторном "=".
+/* ...
+*  4. Починить баг с делением на нуль
+*  5. Баг со сменой знака в завершённом выражении 
+*  6. Почистить rememberOperator()
 */ 
 
 function doMath()
@@ -194,10 +197,20 @@ function doMath()
 	
 	function culculate()
 	{
-		if (firstOperand !== "" && mathOperator !== "" && lastOperand !== "")
+		if (firstOperand !== "" && mathOperator !== "" && lastOperand !== "" && mathResult !== "")
+		{
+			repeatMathCalculation();
+		}
+		else
 		{
 			calculateMathExpression();
 		};
+	};
+	
+	function repeatMathCalculation()
+	{
+		firstOperand = mathResult;
+		calculateMathExpression();
 	};
 	
 	function calculateMathExpression()
@@ -247,7 +260,7 @@ function doMath()
 		}
 		else 
 		{
-			writeMathOperators();
+			writeMathOperands();
 		};
 	};
 	
@@ -257,7 +270,7 @@ function doMath()
 		calcInput.value = mathResult;
 	};
 	
-	function writeMathOperators()
+	function writeMathOperands()
 	{
 		calcInput.value = lastOperand;
 		prevValue.value = firstOperand + " " + mathOperator;
