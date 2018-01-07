@@ -62,11 +62,6 @@ function doMath()
 		};
 	};
 	
-	function newCalculate()
-	{
-		
-	}
-	
 	function doMathOperation()
 	{
 		switch (mathKey)
@@ -201,24 +196,29 @@ function doMath()
 	{
 		if (firstOperand !== "" && mathOperator !== "" && lastOperand !== "")
 		{
-			switch(mathOperator)
-			{
-				case "+":
-					getSum();
-					break;
-				case "-":
-					getDifference();
-					break;
-				case "*":
-					getProduct();
-					break;
-				case "/":
-					getQuotient();
-					break;
-			};
+			calculateMathExpression();
 		};
 	};
-
+	
+	function calculateMathExpression()
+	{
+		switch(mathOperator)
+		{
+			case "+":
+				getSum();
+				break;
+			case "-":
+				getDifference();
+				break;
+			case "*":
+				getProduct();
+				break;
+			case "/":
+				getQuotient();
+				break;
+		};
+	};
+	
 	function getSum()
 	{
 		mathResult = (+firstOperand) + (+lastOperand);
@@ -247,7 +247,7 @@ function doMath()
 		}
 		else 
 		{
-			writeMathOperatirs();
+			writeMathOperators();
 		};
 	};
 	
@@ -257,7 +257,7 @@ function doMath()
 		calcInput.value = mathResult;
 	};
 	
-	function writeMathOperatirs()
+	function writeMathOperators()
 	{
 		calcInput.value = lastOperand;
 		prevValue.value = firstOperand + " " + mathOperator;
