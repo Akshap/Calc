@@ -17,7 +17,6 @@ for (var i = 0; i < key.length; i++)
 };
 
 /* ...
-*  5. Баг со сменой знака в завершённом выражении 
 *  6. Почистить rememberOperator()
 *  7. Почистить culculate()
 */ 
@@ -121,19 +120,18 @@ function doMath()
 	
 	function changeMathSign()
 	{
-		if (isNumeric(lastOperand))
+		if (isNumeric(lastOperand) && mathResult == "")
 		{
 			lastOperand = lastOperand * (-1);
-		}
-		else
-		{
-			lastOperand = 0;
 		};
 	};
 	
 	function calculatePercentage()
 	{
-		(firstOperand !== "") ? lastOperand = ((+firstOperand) / 100) * (+lastOperand) : lastOperand = "0";
+		if (firstOperand !== "" && mathResult == "") 
+		{
+			lastOperand = ((+firstOperand) / 100) * (+lastOperand);
+		};
 	};
 	
 	function applyOperator()
